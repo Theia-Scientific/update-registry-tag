@@ -18,6 +18,7 @@ A GitHub Action for adding many tags to an existing image in a Docker Registry u
 - uses: Theia-Scientific//update-registry-tag@v1
   with:
     registry: ghcr.io
+    token: ${{ secrets.GITHUB_TOKEN }}
     repository: ${{ github.repository }}
     target: sha-${{ github.sha }}
     tags: |
