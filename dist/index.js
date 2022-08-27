@@ -168,13 +168,16 @@ const addTags = (image, tags) => __awaiter(void 0, void 0, void 0, function* () 
         authorization: `Bearer ${image.registry.token}`,
         accept: manifestTypes.map(type => `application/vnd.${type}+json`).join(',')
     };
+    const url = manifestUrl(image, image.target.tag);
+    console.log(`URL: ${url}`);
     /**
      * Manifest
      */
-    const manifest = yield (0, node_fetch_1.default)(manifestUrl(image, image.target.tag), {
+    const manifest = yield (0, node_fetch_1.default)(url, {
         method: 'GET',
         headers
     });
+    console.log(`Manifest: ${manifest}`);
     /**
      * Check status
      */

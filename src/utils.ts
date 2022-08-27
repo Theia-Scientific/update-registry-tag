@@ -35,13 +35,18 @@ export const addTags = async (
     accept: manifestTypes.map(type => `application/vnd.${type}+json`).join(',')
   }
 
+  const url = manifestUrl(image, image.target.tag)
+  console.log(`URL: ${url}`)
+
   /**
    * Manifest
    */
-  const manifest = await fetch(manifestUrl(image, image.target.tag), {
+  const manifest = await fetch(url, {
     method: 'GET',
     headers
   })
+
+  console.log(`Manifest: ${manifest}`)
 
   /**
    * Check status
@@ -65,16 +70,14 @@ export const addTags = async (
    * Add Tags
    */
   return await Promise.all(
-    tags.map(
-      async (tag: string): Promise<Result> => {
-        const result = await fetch(manifestUrl(image, tag), {
-          method: 'PUT',
-          headers,
-          body: targetManifest
-        })
+    tags.map(async (tag: string): Promise<Result> => {
+      const result = await fetch(manifestUrl(image, tag), {
+        method: 'PUT',
+        headers,
+        body: targetManifest
+      })
 
-        return {tag, success: result.status === 201}
-      }
-    )
+      return {tag, success: result.status === 201}
+    })
   )
 }
