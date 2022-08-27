@@ -61,8 +61,8 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             token
         },
         target: {
-            repository: core.getInput('repository'),
-            tag: core.getInput('target')
+            package: core.getInput('package'),
+            target: core.getInput('target')
         }
     };
     /**
@@ -78,10 +78,10 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
      */
     results.forEach((result) => {
         if (result.success === true) {
-            core.info(`${image.target.repository}:${image.target.tag} tagged with ${result.tag}`);
+            core.info(`${image.target.package}:${image.target.target} tagged with ${result.tag}`);
             return;
         }
-        core.setFailed(`${image.target.repository}:${image.target.tag} could not be tagged with ${result.tag}`);
+        core.setFailed(`${image.target.package}:${image.target.target} could not be tagged with ${result.tag}`);
     });
 });
 /**
@@ -145,7 +145,9 @@ const core = __importStar(__nccwpck_require__(2186));
  * Manifest URL
  */
 const manifestUrl = (image, tag) => {
-    return `https://${image.registry.domain}/v2/${image.target.repository}/manifests/${tag}`;
+    const url = `https://${image.registry.domain}/v2/${image.target.package}/manifests/${tag}`;
+    console.log(`URL: ${url}`);
+    return url;
 };
 /**
  * Add Tags
@@ -168,22 +170,19 @@ const addTags = (image, tags) => __awaiter(void 0, void 0, void 0, function* () 
         authorization: `Bearer ${image.registry.token}`,
         accept: manifestTypes.map(type => `application/vnd.${type}+json`).join(',')
     };
-    const url = manifestUrl(image, image.target.tag);
-    console.log(`URL: ${url}`);
     /**
      * Manifest
      */
-    const manifest = yield (0, node_fetch_1.default)(url, {
+    const manifest = yield (0, node_fetch_1.default)(manifestUrl(image, image.target.target), {
         method: 'GET',
         headers
     });
-    console.log(`Manifest: ${manifest}`);
     /**
      * Check status
      */
     if (manifest.status !== 200) {
         core.debug((yield manifest.json()));
-        throw new Error(`${image.target.repository}:${image.target.tag} not found.`);
+        throw new Error(`${image.target.package}:${image.target.target} not found.`);
     }
     const mediaType = manifest.headers.get('Content-Type');
     const targetManifest = yield manifest.text();
