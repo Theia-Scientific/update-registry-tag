@@ -16,7 +16,7 @@ Docker Registry API V2.
 ## Workflow Example
 
 ```yaml
-- uses: Theia-Scientific/update-registry-tag@v1
+- uses: Theia-Scientific/update-registry-tag@v2
   with:
     registry: ghcr.io
     token: ${{ secrets.GITHUB_TOKEN }}
