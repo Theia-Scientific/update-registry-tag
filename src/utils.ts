@@ -1,13 +1,12 @@
-import fetch from 'node-fetch';
-import * as core from '@actions/core';
-import { Image, Result } from './types';
+import fetch from 'node-fetch'
+import * as core from '@actions/core'
+import {Image, Result} from './types'
 
 /**
  * Manifest URL
  */
 const manifestUrl = (image: Image, tag: string): string => {
   const url = `https://${image.registry.domain}/v2/${image.target.package}/manifests/${tag}`
-  console.log(`URL: ${url}`)
 
   return url
 }
