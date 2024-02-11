@@ -1,6 +1,6 @@
-import * as core from '@actions/core';
-import { Result } from './types';
-import { addTags } from './utils';
+import * as core from '@actions/core'
+import {Result} from './types'
+import {addTags} from './utils'
 
 /**
  * Main

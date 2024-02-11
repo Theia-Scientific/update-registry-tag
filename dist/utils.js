@@ -43,7 +43,6 @@ const core = __importStar(require("@actions/core"));
  */
 const manifestUrl = (image, tag) => {
     const url = `https://${image.registry.domain}/v2/${image.target.package}/manifests/${tag}`;
-    console.log(`URL: ${url}`);
     return url;
 };
 /**
